@@ -49,6 +49,6 @@ spec:
       script: |
         #!/bin/bash
         set -e
-        python -m pip install --upgrade pip wheel
-        pip install -r requirements.txt
+        python -m pip install --upgrade pip wheel --root-user-action=ignore
+        pip install -r requirements.txt --root-user-action=ignore
         nosetests $(params.args)
