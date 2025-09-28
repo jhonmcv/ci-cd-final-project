@@ -4,7 +4,7 @@ kind: Task
 metadata:
   name: cleanup
 spec:
-  description: "Esta tarea limpia un workspace eliminando todos los archivos."
+  description: Esta tarea limpia un workspace eliminando todos los archivos.
   workspaces:
     - name: source
   steps:
@@ -44,7 +44,7 @@ spec:
     - name: source
   params:
     - name: args
-      description: "Arguments to pass to nose"
+      description: Arguments to pass to nose
       type: string
       default: "-v"
   steps:
