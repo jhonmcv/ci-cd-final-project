@@ -20,17 +20,17 @@ spec:
       script: |
         #!/usr/bin/env sh
         set -eu
-        echo "Eliminando todos los archivos de ${WORKSPACE_SOURCE_PATH} ..."
-        # Eliminar cualquier contenido existente del directorio si existe.
+        echo "Removing all files from ${WORKSPACE_SOURCE_PATH} ..."
+        # Delete any existing contents of the directory if it exists.
         #
-        # No solo hacemos "rm -rf ${WORKSPACE_SOURCE_PATH}" porque ${WORKSPACE_SOURCE_PATH} podría ser "/"
-        # o la raíz de un volumen montado.
+        # We don't just "rm -rf ${WORKSPACE_SOURCE_PATH}" because ${WORKSPACE_SOURCE_PATH} might be "/"
+        # or the root of a mounted volume.
         if [ -d "${WORKSPACE_SOURCE_PATH}" ] ; then
-          # Eliminar archivos y directorios no ocultos
+          # Delete non-hidden files and directories
           rm -rf "${WORKSPACE_SOURCE_PATH:?}"/*
-          # Eliminar archivos y directorios que comienzan con . pero excluyendo ..
+          # Delete files and directories starting with . but excluding ..
           rm -rf "${WORKSPACE_SOURCE_PATH}"/.[!.]*
-          # Eliminar archivos y directorios que comienzan con .. más cualquier otro carácter
+          # Delete files and directories starting with .. plus any other character
           rm -rf "${WORKSPACE_SOURCE_PATH}"/..?*
         fi
 
