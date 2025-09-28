@@ -18,14 +18,19 @@ spec:
         runAsNonRoot: false
         runAsUser: 0
       script: |
-        #!/bin/sh
+        #!/usr/bin/env sh
         set -eu
         echo "Eliminando todos los archivos de ${WORKSPACE_SOURCE_PATH} ..."
+        # Eliminar cualquier contenido existente del directorio si existe.
+        #
+        # No solo hacemos "rm -rf ${WORKSPACE_SOURCE_PATH}" porque ${WORKSPACE_SOURCE_PATH} podría ser "/"
+        # o la raíz de un volumen montado.
         if [ -d "${WORKSPACE_SOURCE_PATH}" ] ; then
           # Eliminar archivos y directorios no ocultos
           rm -rf "${WORKSPACE_SOURCE_PATH:?}"/*
-          # Eliminar archivos y directorios ocultos (excepto ..)
+          # Eliminar archivos y directorios que comienzan con . pero excluyendo ..
           rm -rf "${WORKSPACE_SOURCE_PATH}"/.[!.]*
+          # Eliminar archivos y directorios que comienzan con .. más cualquier otro carácter
           rm -rf "${WORKSPACE_SOURCE_PATH}"/..?*
         fi
 
@@ -39,7 +44,7 @@ spec:
     - name: source
   params:
     - name: args
-      description: "Argumentos para pasar a nosetests"
+      description: "Arguments to pass to nose"
       type: string
       default: "-v"
   steps:
@@ -49,9 +54,6 @@ spec:
       script: |
         #!/bin/bash
         set -e
-        # Crear entorno virtual para aislar dependencias
-        python -m venv venv
-        source venv/bin/activate
         python -m pip install --upgrade pip wheel
         pip install -r requirements.txt
         nosetests $(params.args)
